@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="lt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasaros gamtininkų stovyklos registracija</title>
+    <!-- Pridėkite Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+    <script>
+        // Konfigūruoti Firebase su savo projekto duomenimis
+        const firebaseConfig = {
+            apiKey: "Jūsų_API_raktas",
+            authDomain: "Jūsų_auth_domain",
+            projectId: "Jūsų_project_ID",
+            storageBucket: "Jūsų_storage_bucket",
+            messagingSenderId: "Jūsų_messaging_sender_ID",
+            appId: "Jūsų_app_ID"
+        };
+
+        // Inicializuoti Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Gauti duomenų bazės nuorodą
+        const database = firebase.database();
+
+        // Funkcija, kuri siunčia duomenis į Firebase
+        function registruotiVaiką() {
+            const vaikoVardas = document.getElementById('vaiko-vardas').value;
+            const vaikoPavardė = document.getElementById('vaiko-pavardė').value;
+            const gimimoMetai = document.getElementById('gimimo-metai').value;
+            const lytis = document.querySelector('input[name="lytis"]:checked').value;
+            const elPastas = document.getElementById('el-paštas').value;
+            const telefonas = document.getElementById('telefonas').value;
+
+            // Įtraukti duomenis į Firebase duomenų bazę
+            database.ref('vaikai').push({
+                vaikoVardas,
+                vaikoPavardė,
+                gimimoMetai,
+                lytis,
+                elPastas,
+                telefonas
+            });
+
+            // Išvalyti formą po sėkmingo įrašymo
+            document.getElementById('registracijos-forma').reset();
+
+            alert('Registracija sėkminga!');
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Vasaros gamtininkų stovyklos registracija</h1>
+    <form id="registracijos-forma">
+        <label for="vaiko-vardas">Vaiko vardas:</label>
+        <input type="text" id="vaiko-vardas" required><br><br>
+
+        <label for="vaiko-pavardė">Vaiko pavardė:</label>
+        <input type="text" id="vaiko-pavardė" required><br><br>
+
+        <label for="gimimo-metai">Vaiko gimimo metai:</label>
+        <input type="number" id="gimimo-metai" min="1900" max="2099" required><br><br>
+
+        <label for="lytis">Vaiko lytis:</label><br>
+        <input type="radio" id="vyras" name="lytis" value="vyras" required>
+        <label for="vyras">Vyras</label><br>
+        <input type="radio" id="moteris" name="lytis" value="moteris" required>
+        <label for="moteris">Moteris</label><br><br>
+
+        <label for="el-paštas">El. paštas:</label>
+        <input type="email" id="el-paštas" required><br><br>
+
+        <label for="telefonas">Telefonas:</label>
+        <input type="tel" id="telefonas" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br><br>
+
+        <button type="button" onclick="registruotiVaiką()">Registruotis</button>
+    </form>
+</body>
+
+</html>
